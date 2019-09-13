@@ -8,7 +8,9 @@ type Room interface {
     MalusRoom(p Player) Player
 }
 
-func (r *Room) getAllRooms() []Room {
+
+
+func getAllRooms() []Room {
 	return []Room{
 		Room(new(BedRoom)), 
 		Room(new(Kitchen)),
@@ -16,6 +18,6 @@ func (r *Room) getAllRooms() []Room {
 		Room(new(WorkOffice)),
 		Room(new(Garage)),
 		Room(new(BathRoom)), 
-		Room(new(Toilet))
+		Room(new(Toilet)),
 	}
 }

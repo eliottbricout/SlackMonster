@@ -9,8 +9,16 @@ type Player struct {
 	graveyard []Room
 }
 
+type PlayerPivot struct {
+	_id string
+	life uint32
+	name string
+	deck []uint32
+	graveyard []uint32
+}
+
 func CreatePlayer(name string) Player{
-	return Player{life: 2, name: name, deck: Room.getAllRooms(), graveyard: []Room{}}
+	return Player{life: 2, name: name, deck: getAllRooms(), graveyard: []Room{}}
 }
 
 func (p *Player) Graveyard() []Room {
