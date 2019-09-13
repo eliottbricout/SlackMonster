@@ -10,7 +10,6 @@ type Player struct {
 }
 
 type PlayerPivot struct {
-	_id string
 	life uint32
 	name string
 	deck []uint32

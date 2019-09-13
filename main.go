@@ -3,15 +3,23 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
+	"github.com/globalsign/mgo/bson"
 	"github.com/go-chi/chi"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"github.com/globalsign/mgo/bson"
+	"log"
+	"net/http"
 	"time"
 
 	"./models"
 )
+
+type PlayerPivot struct {
+	Life int
+	Name string
+	Deck []int
+	Graveyard []int
+}
 
 func main() {
 	url := "mongodb+srv://slackog:slackog@cluster0-qwwtk.mongodb.net/test?	retryWrites=true&w=majority"
@@ -22,17 +30,35 @@ func main() {
 
 	db := client.Database("SlackMonster")
 	playerCollection := db.Collection("Player")
-	var player models.PlayerPivot
-	filter := bson.M{"name": "eliott"}
-	cur := playerCollection.FindOne(ctx, filter).Decode(&player)
+	play := PlayerPivot{1, "fab", []int{1,2,3,4,5},[]int{}}
+
+	fmt.Println(play)
+	eee, tt := playerCollection.InsertOne(context.TODO(), play)
+	if tt != nil {
+		log.Fatal(tt)
+	}
+	fmt.Println("eee")
+	fmt.Println(eee)
+	fmt.Println(eee.InsertedID)
+
+
+	var player PlayerPivot
+	filter := bson.M{"name": "fab"}
+	cur := playerCollection.FindOne(ctx, filter)
 	p, err := playerCollection.Find(ctx, bson.M{})
 	p.Next(context.Background())
 	fmt.Println(p.Current)
-	fmt.Println(err)
 
 	fmt.Println(client)
-	fmt.Println(cur.Error())
-	fmt.Println(player)
+	x, _ := cur.DecodeBytes()
+	fmt.Println(x.String())
+
+	if err != playerCollection.FindOne(ctx, filter).Decode(&player) {
+		log.Fatal(err)
+	} else {
+		fmt.Println(player)
+	}
+
 
 
 	r := chi.NewRouter()
@@ -41,6 +67,7 @@ func main() {
 	})
 	http.ListenAndServe(":3000", r)
 }
+
 
 func test() {
 	player := models.CreatePlayer("eliott")
