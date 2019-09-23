@@ -16,8 +16,9 @@ func CreateChoiceService(database mongo.Database, service PlayerService) ChoiceS
 	return ChoiceService {repository.CreateChoiceRepository(database), service}
 }
 
-func(service *ChoiceService) PostChoiceRest(w http.ResponseWriter, r *http.Request) {
+func(service *ChoiceService) ChoiceRest(w http.ResponseWriter, r *http.Request) {
 	player := service.playerService.GetPlayer("eliott")
+
 	choice, err := player.Choice(0)
 	service.repositoryChoice.AddChoice(choice)
 	if err {

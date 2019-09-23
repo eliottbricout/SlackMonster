@@ -11,19 +11,23 @@ import (
 	"net/http"
 )
 
-
 func main() {
-	url := "mongodb+srv://slackog:slackog@cluster0-qwwtk.mongodb.net/test?	retryWrites=true&w=majority"
-	client, _ := mongo.Connect(context.Background(), options.Client().ApplyURI(url))
+	url := "mongodb+srv://slackog:slackog@cluster0-qwwtk.mongodb.net/test?retryWrites=true&w=majority"
+	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(url))
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("connect")
+	}
 	database := client.Database("SlackMonster")
-	servicePlayer :=  service.CreatePlayerService(*database)
-	serviceChoice :=  service.CreateChoiceService(*database, servicePlayer)
+	servicePlayer := service.CreatePlayerService(*database)
+	serviceChoice := service.CreateChoiceService(*database, servicePlayer)
 	r := chi.NewRouter()
-	r.Get("/info", servicePlayer.GetPlayerRest)
-	r.Post("/choice", serviceChoice.PostChoiceRest)
+	r.Post("/info", servicePlayer.PlayerRest)
+	r.Post("/rooms", service.ListRoomRest)
+	r.Post("/choose", serviceChoice.ChoiceRest)
 	http.ListenAndServe(":3000", r)
 }
-
 
 func test() {
 	player := models.CreatePlayer("eliott")

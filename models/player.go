@@ -17,7 +17,7 @@ type PlayerPivot struct {
 }
 
 func CreatePlayer(name string) Player{
-	return Player{life: 2, name: name, deck: getAllRooms(), graveyard: []Room{}}
+	return Player{life: 2, name: name, deck: GetAllRooms(), graveyard: []Room{}}
 }
 
 func (p *Player) Graveyard() []Room {
@@ -29,7 +29,7 @@ func (p *Player) Deck() []Room {
 }
 
 func (p *Player) Infos() string {
-	return fmt.Sprintf("Nom %s\nVie %d\nJeu: %s\nCimetière: %s",
+	return fmt.Sprintf("Nom %s\nVie %d\nJeu: %s\nDefausse: %s",
 		p.name, p.life, displayDeck(p.deck), displayDeck(p.graveyard))
 }
 
@@ -56,6 +56,16 @@ func (p *PlayerPivot) TransformPlayer() Player{
 	player.graveyard = createRooms(p.Graveyard)
 	return player
 }
+
+func (p *Player) TransformPlayerPivot() PlayerPivot{
+	var player PlayerPivot
+	player.Name = p.name
+	player.Life = p.life
+	player.Deck = getIdRooms(p.deck)
+	player.Graveyard = getIdRooms(p.graveyard)
+	return player
+}
+
 
 
 func addRoom(rooms []Room, room Room) []Room {

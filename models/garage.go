@@ -11,7 +11,7 @@ func (r *Garage) Name() string {
 }
 
 func (r *Garage) Description() string {
-	return "Récupération du garage + 2 pièce dans le cimetière (utiliser 2 fois la commande : /recoverRoom {idRoom})"
+	return "Récupération du garage + 2 pièce dans le defausse (utiliser 2 fois la commande : /recoverRoom {idRoom})"
 }
 
 func (r *Garage) PowerRoom(p Player) Player{

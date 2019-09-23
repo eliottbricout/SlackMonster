@@ -1,16 +1,14 @@
 package models
 
 type Room interface {
-    Id() int
-    Name() string
-    Description() string
-    PowerRoom(p Player) Player
-    MalusRoom(p Player) Player
+	Id() int
+	Name() string
+	Description() string
+	PowerRoom(p Player) Player
+	MalusRoom(p Player) Player
 }
 
-
-
-func getAllRooms() []Room {
+func GetAllRooms() []Room {
 	return []Room{
 		Room(new(BedRoom)),
 		Room(new(Kitchen)),
@@ -23,7 +21,7 @@ func getAllRooms() []Room {
 }
 
 func getRoom(id int) Room {
-	for _, room := range getAllRooms() {
+	for _, room := range GetAllRooms() {
 		if room.Id() == id {
 			return room
 		}
@@ -31,10 +29,18 @@ func getRoom(id int) Room {
 	return nil
 }
 
-func createRooms(idRooms []int) []Room{
+func createRooms(idRooms []int) []Room {
 	var rooms []Room
 	for _, idRoom := range idRooms {
 		rooms = addRoom(rooms, getRoom(idRoom))
 	}
 	return rooms
+}
+
+func getIdRooms(rooms []Room) []int {
+	var idRooms []int
+	for _, room := range rooms {
+		idRooms = append(idRooms, room.Id())
+	}
+	return idRooms
 }
