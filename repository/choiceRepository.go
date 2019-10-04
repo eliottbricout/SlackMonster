@@ -16,13 +16,19 @@ func CreateChoiceRepository(database mongo.Database) ChoiceRepository {
 	return ChoiceRepository{choiceCollection}
 }
 
-func (repo *ChoiceRepository) GetChoice(name string) models.Choice {
-	filter := bson.M{"playerName": name}
+func (repo *ChoiceRepository) GetChoice(id string) (models.Choice, error) {
+	filter := bson.M{"playerid": id}
 	var choice models.Choice
-	repo.choiceCollection.FindOne(context.TODO(), filter).Decode(&choice)
-	return choice
+	err := repo.choiceCollection.FindOne(context.TODO(), filter).Decode(&choice)
+	return choice, err
 }
 
-func (repo *ChoiceRepository) AddChoice(Choice models.Choice) {
-	repo.choiceCollection.InsertOne(context.TODO(), Choice)
+func (repo *ChoiceRepository) AddChoice(choice models.Choice) {
+	repo.choiceCollection.InsertOne(context.TODO(), choice)
+}
+
+func (repo *ChoiceRepository) UpdateChoice(choice models.Choice) {
+	filter := bson.M{"playerid": bson.M{"$eq": choice.PlayerId}}
+	update := bson.M{"$set": bson.M{"roomid": choice.RoomId}}
+	repo.choiceCollection.UpdateOne(context.TODO(), filter, update)
 }

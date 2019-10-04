@@ -6,7 +6,7 @@ import (
 	"../models"
 )
 
-func ListRoomRest(w http.ResponseWriter, r *http.Request) {
+func ListRoom(w http.ResponseWriter, _ *http.Request) {
 	desc := ""
 	for _ , room := range models.GetAllRooms() {
 		desc += fmt.Sprintf("[%d] %s : %s\n", room.Id(), room.Name(), room.Description())

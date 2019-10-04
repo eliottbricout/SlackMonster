@@ -1,7 +1,6 @@
 package main
 
 import (
-	"./models"
 	"./service"
 	"context"
 	"fmt"
@@ -23,21 +22,10 @@ func main() {
 	servicePlayer := service.CreatePlayerService(*database)
 	serviceChoice := service.CreateChoiceService(*database, servicePlayer)
 	r := chi.NewRouter()
-	r.Post("/info", servicePlayer.PlayerRest)
-	r.Post("/rooms", service.ListRoomRest)
+	r.Post("/info", servicePlayer.InfoPlayer)
+	r.Post("/join", servicePlayer.JoinPlayer)
+	r.Post("/check", servicePlayer.CheckPlayer)
+	r.Post("/rooms", service.ListRoom)
 	r.Post("/choose", serviceChoice.ChoiceRest)
 	http.ListenAndServe(":3000", r)
-}
-
-func test() {
-	player := models.CreatePlayer("eliott")
-	fmt.Println(player.Infos())
-	player = player.Deck()[0].PowerRoom(player)
-	fmt.Println(player.Infos())
-	player = player.Deck()[0].PowerRoom(player)
-	fmt.Println(player.Infos())
-	player = player.Deck()[0].MalusRoom(player)
-	fmt.Println(player.Infos())
-	player = player.Deck()[0].PowerRoom(player)
-	fmt.Println(player.Infos())
 }

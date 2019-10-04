@@ -1,29 +1,50 @@
 package service
 
 import (
+	"../models"
 	"../repository"
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
+	"strconv"
 )
 
 type ChoiceService struct {
 	repositoryChoice repository.ChoiceRepository
-	playerService PlayerService
+	playerService    PlayerService
 }
 
-func CreateChoiceService(database mongo.Database, service PlayerService) ChoiceService{
-	return ChoiceService {repository.CreateChoiceRepository(database), service}
+func CreateChoiceService(database mongo.Database, service PlayerService) ChoiceService {
+	return ChoiceService{repository.CreateChoiceRepository(database), service}
 }
 
-func(service *ChoiceService) ChoiceRest(w http.ResponseWriter, r *http.Request) {
-	player := service.playerService.GetPlayer("eliott")
-
-	choice, err := player.Choice(0)
-	service.repositoryChoice.AddChoice(choice)
-	if err {
-		w.Write([]byte("la pièce n'est pas dans votre deck"))
+func (service *ChoiceService) ChoiceRest(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		w.Write([]byte("Erreur"))
+		return
+	}
+	userId := r.PostForm.Get("user_id")
+	idRoom := r.PostForm.Get("text")
+	player, err := service.playerService.getPlayer(userId)
+	if err != nil {
+		w.Write([]byte("Vous n'êtes pas dans la partie"))
+	} else if id, err := strconv.Atoi(idRoom); err == nil {
+		service.addChoice(w, player, id)
 	} else {
+		w.Write([]byte("c'est pas un nombre ça"))
+	}
+
+}
+
+func (service *ChoiceService) addChoice(w http.ResponseWriter, player models.Player, id int) {
+	choice, noRoom := player.Choice(id)
+	if noRoom {
+		w.Write([]byte("la pièce n'est pas dans votre deck"))
+	} else if _, err := service.repositoryChoice.GetChoice(player.Id()); err == nil {
+		service.repositoryChoice.UpdateChoice(choice)
+		w.Write([]byte(fmt.Sprintf("votre choix a été sauvegardé")))
+	} else {
+		service.repositoryChoice.AddChoice(choice)
 		w.Write([]byte(fmt.Sprintf("votre choix a été sauvegardé")))
 	}
 }

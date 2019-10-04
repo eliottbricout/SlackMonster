@@ -3,21 +3,27 @@ package models
 import "fmt"
 
 type Player struct {
-	life int
+	id string
 	name string
+	life int
 	deck []Room
 	graveyard []Room
 }
 
 type PlayerPivot struct {
-	Life int
+	Id string
 	Name string
+	Life int
 	Deck []int
 	Graveyard []int
 }
 
-func CreatePlayer(name string) Player{
-	return Player{life: 2, name: name, deck: GetAllRooms(), graveyard: []Room{}}
+func CreatePlayer(name string, id string) Player{
+	return Player{id: id, life: 2, name: name, deck: GetAllRooms(), graveyard: []Room{}}
+}
+
+func (p *Player) Id() string {
+	return p.id
 }
 
 func (p *Player) Graveyard() []Room {
@@ -29,7 +35,7 @@ func (p *Player) Deck() []Room {
 }
 
 func (p *Player) Infos() string {
-	return fmt.Sprintf("Nom %s\nVie %d\nJeu: %s\nDefausse: %s",
+	return fmt.Sprintf("Nom %s\nVie %d\nJeu: %s\nDefausse: %s\n",
 		p.name, p.life, displayDeck(p.deck), displayDeck(p.graveyard))
 }
 
@@ -45,11 +51,12 @@ func (p *Player) RemoveRoomDeck(room Room) {
 
 func (p *Player) Choice(idRoom int) (Choice, bool) {
 	room := getRoom(idRoom)
-	return Choice{p.name, idRoom} , room == nil || !isPresent(p.deck, room)
+	return Choice{p.id, idRoom} , room == nil || !isPresent(p.deck, room)
 }
 
 func (p *PlayerPivot) TransformPlayer() Player{
 	var player Player
+	player.id = p.Id
 	player.name = p.Name
 	player.life = p.Life
 	player.deck = createRooms(p.Deck)
@@ -59,6 +66,7 @@ func (p *PlayerPivot) TransformPlayer() Player{
 
 func (p *Player) TransformPlayerPivot() PlayerPivot{
 	var player PlayerPivot
+	player.Id = p.id
 	player.Name = p.name
 	player.Life = p.life
 	player.Deck = getIdRooms(p.deck)
