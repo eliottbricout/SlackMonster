@@ -37,6 +37,9 @@ func (service *ChoiceService) ChoiceRest(w http.ResponseWriter, r *http.Request)
 }
 
 func (service *ChoiceService) addChoice(w http.ResponseWriter, player models.Player, id int) {
+	if player.IsMonster() {
+
+	}
 	choice, noRoom := player.Choice(id)
 	if noRoom {
 		w.Write([]byte("la pièce n'est pas dans votre deck"))
@@ -47,4 +50,8 @@ func (service *ChoiceService) addChoice(w http.ResponseWriter, player models.Pla
 		service.repositoryChoice.AddChoice(choice)
 		w.Write([]byte(fmt.Sprintf("votre choix a été sauvegardé")))
 	}
+}
+
+func (service *ChoiceService) searchChoice(player models.Player) (models.Choice, error) {
+	return service.repositoryChoice.GetChoice(player.Id())
 }

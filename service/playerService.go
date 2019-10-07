@@ -69,8 +69,12 @@ func (service *PlayerService) getPlayer(id string) (models.Player, error){
 	return service.repositoryPlayer.GetPlayerById(id)
 }
 
+func (service *PlayerService) GetAllPlayer() ([]models.Player){
+	return service.repositoryPlayer.GetAllPlayer()
+}
+
 func (service *PlayerService) checkAllPlayer(w http.ResponseWriter){
-	players := service.repositoryPlayer.GetAllPlayer()
+	players := service.GetAllPlayer()
 	for _, player := range players {
 		w.Write([]byte(player.Infos()))
 	}

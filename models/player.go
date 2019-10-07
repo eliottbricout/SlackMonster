@@ -4,6 +4,7 @@ import "fmt"
 
 type Player struct {
 	id string
+	isMonster bool
 	name string
 	life int
 	deck []Room
@@ -12,6 +13,7 @@ type Player struct {
 
 type PlayerPivot struct {
 	Id string
+	IsMonster bool
 	Name string
 	Life int
 	Deck []int
@@ -32,6 +34,10 @@ func (p *Player) Graveyard() []Room {
 
 func (p *Player) Deck() []Room {
 	return p.deck
+}
+
+func (p *Player) IsMonster() bool {
+	return p.isMonster
 }
 
 func (p *Player) Infos() string {
@@ -57,6 +63,7 @@ func (p *Player) Choice(idRoom int) (Choice, bool) {
 func (p *PlayerPivot) TransformPlayer() Player{
 	var player Player
 	player.id = p.Id
+	player.isMonster = p.IsMonster
 	player.name = p.Name
 	player.life = p.Life
 	player.deck = createRooms(p.Deck)
@@ -67,6 +74,7 @@ func (p *PlayerPivot) TransformPlayer() Player{
 func (p *Player) TransformPlayerPivot() PlayerPivot{
 	var player PlayerPivot
 	player.Id = p.id
+	player.IsMonster = p.isMonster
 	player.Name = p.name
 	player.Life = p.life
 	player.Deck = getIdRooms(p.deck)

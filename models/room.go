@@ -20,7 +20,7 @@ func GetAllRooms() []Room {
 	}
 }
 
-func getRoom(id int) Room {
+func GetRoom(id int) Room {
 	for _, room := range GetAllRooms() {
 		if room.Id() == id {
 			return room
@@ -32,7 +32,7 @@ func getRoom(id int) Room {
 func createRooms(idRooms []int) []Room {
 	var rooms []Room
 	for _, idRoom := range idRooms {
-		rooms = addRoom(rooms, getRoom(idRoom))
+		rooms = addRoom(rooms, GetRoom(idRoom))
 	}
 	return rooms
 }
