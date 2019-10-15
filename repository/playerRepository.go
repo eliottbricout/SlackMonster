@@ -19,7 +19,7 @@ func CreatePlayerRepository(database mongo.Database) PlayerRepository {
 }
 
 func (repo *PlayerRepository) GetPlayer(name string) (models.Player, error) {
-	filter := bson.M{"name":  bson.M{"$regex": name }}
+	filter := bson.M{"name": bson.M{"$regex": name}}
 	var player models.PlayerPivot
 	err := repo.playerCollection.FindOne(context.TODO(), filter).Decode(&player)
 	fmt.Println(player)
@@ -47,7 +47,7 @@ func (repo *PlayerRepository) GetPlayerById(id string) (models.Player, error) {
 func (repo *PlayerRepository) AddPlayer(player models.PlayerPivot) {
 	repo.playerCollection.InsertOne(context.TODO(), player)
 }
-func (repo *PlayerRepository) GetAllPlayer() []models.Player{
+func (repo *PlayerRepository) GetAllPlayer() []models.Player {
 	cursor, err := repo.playerCollection.Find(context.TODO(), bson.M{})
 	if err != nil {
 		return []models.Player{}
@@ -64,7 +64,18 @@ func (repo *PlayerRepository) GetAllPlayer() []models.Player{
 	return players
 }
 
-func (repo *PlayerRepository) UpdatePlayer(choice models.Choice) {
-	filter := bson.M{"playerId": choice.PlayerId}
-	repo.playerCollection.UpdateOne(context.TODO(), filter, choice)
+func (repo *PlayerRepository) UpdatePlayer(player models.PlayerPivot) {
+	filter := bson.M{"id": player.Id}
+	update := bson.M{"$set": bson.M{
+		"life":      player.Life,
+		"isMonster": player.IsMonster,
+		"deck":      player.Deck,
+		"graveyard": player.Graveyard,
+	}}
+	fmt.Println(player)
+	fmt.Println(update)
+	fmt.Println(filter)
+	p, err := repo.playerCollection.UpdateOne(context.TODO(), filter, update)
+	fmt.Println(err)
+	fmt.Println(p)
 }

@@ -11,11 +11,10 @@ func (r *LivingRoom) Name() string {
 }
 
 func (r *LivingRoom) Description() string {
-	return ""
+	return "Vous êtes au centre de la maison d'ici vous pouvez réfléchir à votre prochaine destination"
 }
 
 func (r *LivingRoom) PowerRoom(p Player) Player{
-	
 	p.RemoveRoomDeck(r)
 	return p
 }

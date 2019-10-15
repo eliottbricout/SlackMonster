@@ -60,6 +60,10 @@ func (service *PlayerService) CheckPlayer(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func (service *PlayerService) UpdatePlayer(player models.Player) {
+	service.repositoryPlayer.UpdatePlayer(player.TransformPlayerPivot())
+}
+
 func (service *PlayerService) addPlayer(name string, id string) {
 	player := models.CreatePlayer(name, id)
 	service.repositoryPlayer.AddPlayer(player.TransformPlayerPivot())

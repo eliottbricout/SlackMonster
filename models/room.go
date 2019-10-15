@@ -20,6 +20,15 @@ func GetAllRooms() []Room {
 	}
 }
 
+func GetInitRooms() []Room {
+	return []Room{
+		Room(new(BedRoom)),
+		Room(new(Kitchen)),
+		Room(new(LivingRoom)),
+		Room(new(WorkOffice)),
+	}
+}
+
 func GetRoom(id int) Room {
 	for _, room := range GetAllRooms() {
 		if room.Id() == id {

@@ -11,10 +11,13 @@ func (r *Kitchen) Name() string {
 }
 
 func (r *Kitchen) Description() string {
-	return "Récupération de la cuisine + 1 pièce dans le defausse (commande : /recoverRoom {idRoom})"
+	return "Récupération de la cuisine + 1 pièce aléatoire dans le defausse"
 }
 
 func (r *Kitchen) PowerRoom(p Player) Player{
+	if room := p.RandomGraveyardPlayer(); room != nil {
+		p.RecoverRoomGraveyard(room)
+	}
 	return p
 }
 

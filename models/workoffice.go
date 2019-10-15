@@ -14,7 +14,15 @@ func (r *WorkOffice) Description() string {
 	return "Vous pouvez récupérer les clés d'une nouvelle pièce de la maison"
 }
 
-func (r *WorkOffice) PowerRoom(p Player) Player{
+func (r *WorkOffice) PowerRoom(p Player) Player {
+	allRoom := GetAllRooms()
+	playerRoom := append(p.graveyard, p.deck...)
+	for _, room := range playerRoom {
+		allRoom = removeRoom(allRoom, room)
+	}
+	if room := randomRoom(allRoom); room != nil {
+		p.RecoverRoomGraveyard(room)
+	}
 	p.RemoveRoomDeck(r)
 	return p
 }

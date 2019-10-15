@@ -1,31 +1,49 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 type Player struct {
-	id string
+	id        string
 	isMonster bool
-	name string
-	life int
-	deck []Room
+	name      string
+	life      int
+	deck      []Room
 	graveyard []Room
 }
 
 type PlayerPivot struct {
-	Id string
+	Id        string
 	IsMonster bool
-	Name string
-	Life int
-	Deck []int
+	Name      string
+	Life      int
+	Deck      []int
 	Graveyard []int
 }
 
-func CreatePlayer(name string, id string) Player{
-	return Player{id: id, life: 2, name: name, deck: GetAllRooms(), graveyard: []Room{}}
+func CreatePlayer(name string, id string) Player {
+	return Player{id: id, isMonster: false, life: 0, name: name, deck: []Room{}, graveyard: []Room{}}
+}
+
+func (p *Player) InitParty() {
+	p.life = 2
+	p.isMonster = false
+	p.deck = GetInitRooms()
+	p.graveyard = []Room{}
 }
 
 func (p *Player) Id() string {
 	return p.id
+}
+
+func (p *Player) Name() string {
+	return p.name
+}
+
+func (p *Player) Life() int {
+	return p.life
 }
 
 func (p *Player) Graveyard() []Room {
@@ -40,8 +58,18 @@ func (p *Player) IsMonster() bool {
 	return p.isMonster
 }
 
+func (p *Player) SetMonster(isMonster bool) {
+	p.isMonster = isMonster
+}
+
 func (p *Player) Infos() string {
-	return fmt.Sprintf("Nom %s\nVie %d\nJeu: %s\nDefausse: %s\n",
+	if p.isMonster {
+		return ":darkmickey: *" + p.name + "* est le dark Mickey\n\n"
+	}
+	if p.life == 0 {
+		return "*" + p.name +"* : ☠\n"
+	}
+	return fmt.Sprintf("Nom *%s*\n %d ❤ ️ \nJeu: %s\nDefausse: %s\n\n",
 		p.name, p.life, displayDeck(p.deck), displayDeck(p.graveyard))
 }
 
@@ -56,11 +84,11 @@ func (p *Player) RemoveRoomDeck(room Room) {
 }
 
 func (p *Player) Choice(idRoom int) (Choice, bool) {
-	room := getRoom(idRoom)
-	return Choice{p.id, idRoom} , room == nil || !isPresent(p.deck, room)
+	room := GetRoom(idRoom)
+	return Choice{p.id, idRoom}, room == nil || !isPresent(p.deck, room)
 }
 
-func (p *PlayerPivot) TransformPlayer() Player{
+func (p *PlayerPivot) TransformPlayer() Player {
 	var player Player
 	player.id = p.Id
 	player.isMonster = p.IsMonster
@@ -71,7 +99,7 @@ func (p *PlayerPivot) TransformPlayer() Player{
 	return player
 }
 
-func (p *Player) TransformPlayerPivot() PlayerPivot{
+func (p *Player) TransformPlayerPivot() PlayerPivot {
 	var player PlayerPivot
 	player.Id = p.id
 	player.IsMonster = p.isMonster
@@ -81,8 +109,6 @@ func (p *Player) TransformPlayerPivot() PlayerPivot{
 	player.Graveyard = getIdRooms(p.graveyard)
 	return player
 }
-
-
 
 func addRoom(rooms []Room, room Room) []Room {
 	return append(rooms, room)
@@ -107,7 +133,7 @@ func isPresent(rooms []Room, room Room) bool {
 	return false
 }
 
-func displayDeck(rooms []Room) string{
+func displayDeck(rooms []Room) string {
 	display := ""
 	for _, room := range rooms {
 		display += fmt.Sprintf(", %d:%s", room.Id(), room.Name())
@@ -116,4 +142,20 @@ func displayDeck(rooms []Room) string{
 		display = display[2:]
 	}
 	return "[" + display + "]"
+}
+
+func (p *Player) RandomChoicePlayer() Room {
+	return randomRoom(p.deck)
+}
+
+func (p *Player) RandomGraveyardPlayer() Room {
+	return randomRoom(p.graveyard)
+}
+
+func randomRoom(rooms []Room) Room {
+	if len(rooms) == 0 {
+		return nil
+	}
+	index := rand.Intn(len(rooms))
+	return rooms[index]
 }

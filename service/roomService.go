@@ -1,9 +1,9 @@
 package service
 
 import (
+	"../models"
 	"fmt"
 	"net/http"
-	"../models"
 )
 
 func ListRoom(w http.ResponseWriter, _ *http.Request) {
