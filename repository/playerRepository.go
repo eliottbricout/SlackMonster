@@ -72,10 +72,5 @@ func (repo *PlayerRepository) UpdatePlayer(player models.PlayerPivot) {
 		"deck":      player.Deck,
 		"graveyard": player.Graveyard,
 	}}
-	fmt.Println(player)
-	fmt.Println(update)
-	fmt.Println(filter)
-	p, err := repo.playerCollection.UpdateOne(context.TODO(), filter, update)
-	fmt.Println(err)
-	fmt.Println(p)
+	repo.playerCollection.UpdateOne(context.TODO(), filter, update)
 }

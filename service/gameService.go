@@ -23,6 +23,15 @@ func CreateGameService(choicesService ChoiceService, playerService PlayerService
 }
 
 func (service *GameService) StartParty(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		w.Write([]byte("Erreur"))
+		return
+	}
+	if r.PostForm.Get("user_id") == "UCPENAHK2" {
+		w.Write([]byte("Seul l'élu peut lancer une party"))
+		return
+	}
+
 	players := service.playerService.GetAllPlayer()
 	indexMonster := rand.Intn(len(players))
 	fmt.Print()
@@ -37,6 +46,14 @@ func (service *GameService) StartParty(w http.ResponseWriter, r *http.Request) {
 }
 
 func (service *GameService) NextDay(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		w.Write([]byte("Erreur"))
+		return
+	}
+	if r.PostForm.Get("user_id") == "UCPENAHK2" {
+		w.Write([]byte("Seul l'élu peut voyager dans le temps"))
+		return
+	}
 	players := service.playerService.GetAllPlayer()
 	players = allAlivePlayer(players)
 	choiceRoomMonster, monster := service.choiceMonster(players)

@@ -85,6 +85,9 @@ func (p *Player) RemoveRoomDeck(room Room) {
 
 func (p *Player) Choice(idRoom int) (Choice, bool) {
 	room := GetRoom(idRoom)
+	if p.isMonster {
+		return Choice{p.id, idRoom}, room == nil
+	}
 	return Choice{p.id, idRoom}, room == nil || !isPresent(p.deck, room)
 }
 

@@ -37,13 +37,16 @@ func (service *ChoiceService) ChoiceRest(w http.ResponseWriter, r *http.Request)
 }
 
 func (service *ChoiceService) addChoice(w http.ResponseWriter, player models.Player, id int) {
-	if player.IsMonster() {
-
-	}
 	choice, noRoom := player.Choice(id)
 	if noRoom {
 		w.Write([]byte("la pièce n'est pas dans votre deck"))
-	} else if _, err := service.repositoryChoice.GetChoice(player.Id()); err == nil {
+	} else {
+		service.addUpdateChoice(w, player, choice)
+	}
+}
+
+func (service *ChoiceService) addUpdateChoice(w http.ResponseWriter, player models.Player, choice models.Choice) {
+	if _, err := service.repositoryChoice.GetChoice(player.Id()); err == nil {
 		service.repositoryChoice.UpdateChoice(choice)
 		w.Write([]byte(fmt.Sprintf("votre choix a été sauvegardé")))
 	} else {
