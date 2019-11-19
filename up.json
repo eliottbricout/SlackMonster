@@ -1,11 +1,5 @@
 {
   "name": "slack-monster",
-  "profile": "myaccount",
-  "regions": [
-    "eu-west-1"
-  ],
-  "hooks": {
-    "build": "go build -o server main.go",
-    "clean": "rm server"
-  }
+  "profile": "SlackMonster",
+  "regions": ["eu-west-1"]
 }

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"../models"
+	"github.com/eliottbricout/SlackMonster/models"
 	"context"
 	"github.com/globalsign/mgo/bson"
 	"go.mongodb.org/mongo-driver/mongo"

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"../models"
+	"github.com/eliottbricout/SlackMonster/models"
 	"fmt"
 	"net/http"
 )

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"../models"
+	"github.com/eliottbricout/SlackMonster/models"
 	"context"
 	"fmt"
 	"github.com/globalsign/mgo/bson"

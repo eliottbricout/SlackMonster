@@ -1,8 +1,8 @@
 package service
 
 import (
-	"../models"
-	"../repository"
+	"github.com/eliottbricout/SlackMonster/models"
+	"github.com/eliottbricout/SlackMonster/repository"
 	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"

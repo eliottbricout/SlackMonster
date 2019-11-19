@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./service"
+	"github.com/eliottbricout/SlackMonster/service"
 	"context"
 	"fmt"
 	"github.com/go-chi/chi"
