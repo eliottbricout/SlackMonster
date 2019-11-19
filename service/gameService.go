@@ -74,6 +74,7 @@ func (service *GameService) choiceMonster(players []models.Player) (int, models.
 }
 
 func (service *GameService) resolveDay(players []models.Player, choiceRoomMonster int, monster models.Player) {
+	service.printRepository.Print("\n 🌙 fin de la journée 🌙 \n\n")
 	for _, player := range players {
 		if !player.IsMonster() {
 			choice, err := service.choiceService.searchChoice(player)
